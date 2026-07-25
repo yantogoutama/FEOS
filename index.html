@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FORISA Executive Operating System (FEOS)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-icon">F</div>
+          <div class="brand-text">
+            <span class="brand-name">FORISA IMPACT</span>
+            <span class="brand-sub">Executive Operating System</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Platform</div>
+          <button class="nav-item active" data-view="dashboard" onclick="FEOS.navigate('dashboard')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Executive Dashboard
+          </button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Advisory Engines</div>
+          <button class="nav-item" data-view="diagnostic" onclick="FEOS.navigate('diagnostic')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h4"/><path d="M18 12h4"/><path d="M12 2v4"/><path d="M12 18v4"/><circle cx="12" cy="12" r="5"/></svg>
+            Executive Diagnostic
+          </button>
+          <button class="nav-item" data-view="strategy" onclick="FEOS.navigate('strategy')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Strategy Advisor
+          </button>
+          <button class="nav-item" data-view="governance" onclick="FEOS.navigate('governance')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Governance Advisor
+          </button>
+          <button class="nav-item" data-view="hr" onclick="FEOS.navigate('hr')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            HR Business Advisor
+          </button>
+          <button class="nav-item" data-view="compliance" onclick="FEOS.navigate('compliance')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
+            Compliance Advisor
+          </button>
+          <button class="nav-item" data-view="risk" onclick="FEOS.navigate('risk')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Risk Advisor
+          </button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">System Builders</div>
+          <button class="nav-item" data-view="sop" onclick="FEOS.navigate('sop')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            SOP Builder
+          </button>
+          <button class="nav-item" data-view="kpi" onclick="FEOS.navigate('kpi')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            KPI Builder
+          </button>
+          <button class="nav-item" data-view="policy" onclick="FEOS.navigate('policy')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Policy Builder
+          </button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Intelligence</div>
+          <button class="nav-item" data-view="decision" onclick="FEOS.navigate('decision')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            Decision Assistant
+          </button>
+          <button class="nav-item" data-view="news" onclick="FEOS.navigate('news')">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+            Executive News
+          </button>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-badge">
+          <div class="user-avatar">EX</div>
+          <div class="user-info">
+            <span class="user-name">Executive User</span>
+            <span class="user-role">CEO / Director Level</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="menu-toggle" id="menuToggle" onclick="FEOS.toggleSidebar()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div>
+            <div class="page-title" id="pageTitle">Executive Dashboard</div>
+            <div class="page-subtitle" id="pageSubtitle">Executive Intelligence Platform for Building Scalable Organizations</div>
+          </div>
+        </div>
+        <div class="top-bar-right">
+          <button class="btn-icon" title="Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          </button>
+          <button class="btn-icon" title="Settings">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-area" id="contentArea">
+        <div class="module-view active" id="view-dashboard">
+          <div class="dashboard-header">
+            <h1>Welcome to <span class="text-gold">FORISA Executive OS</span></h1>
+            <p>Your AI-powered executive advisory platform for strategic decision-making, organizational diagnostics, and sustainable growth.</p>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-label">System Status</div><div class="stat-value text-green">Active</div><div class="stat-change positive">All engines operational</div></div>
+            <div class="stat-card"><div class="stat-label">Advisory Modules</div><div class="stat-value">11</div><div class="stat-change">Executive-grade tools</div></div>
+            <div class="stat-card"><div class="stat-label">Analysis Frameworks</div><div class="stat-value">7</div><div class="stat-change">Proven methodologies</div></div>
+            <div class="stat-card"><div class="stat-label">Last Updated</div><div class="stat-value" id="lastUpdated">Today</div><div class="stat-change">Version 1.0</div></div>
+          </div>
+          <div class="module-grid">
+            <div class="module-card" onclick="FEOS.navigate('diagnostic')"><div class="module-icon gold">&#x2696;</div><div class="module-title">Executive Diagnostic</div><div class="module-desc">Analyze organizational health, management maturity, and identify bottlenecks across strategy, structure, people, and processes.</div><div class="module-action">Launch Engine &rarr;</div></div>
+            <div class="module-card" onclick="FEOS.navigate('strategy')"><div class="module-icon blue">&#x25B2;</div><div class="module-title">Strategy Advisor</div><div class="module-desc">Business strategy analysis, growth planning, competitive positioning, and strategic transformation roadmaps.</div><div class="module-action">Launch Engine &rarr;</div></div>
+            <div class="module-card" onclick="FEOS.navigate('governance')"><div class="module-icon purple">&#x26A0;</div><div class="module-title">Governance Advisor</div><div class="module-desc">Build strong corporate governance through structure analysis, authority delegation, and accountability systems.</div><div class="module-action">Launch Engine &rarr;</div></div>
+            <div class="module-card" onclick="FEOS.navigate('hr')"><div class="module-icon green">&#x1F465;</div><div class="module-title">HR Business Advisor</div><div class="module-desc">Transform HR into a strategic business partner with organization design, talent management, and performance systems.</div><div class="module-action">Launch Engine &rarr;</div></div>
+            <div class="module-card" onclick="FEOS.navigate('compliance')"><div class="module-icon amber">&#x1F4C4;</div><div class="module-title">Compliance Advisor</div><div class="module-desc">Ensure regulatory compliance, ethical standards, and internal policy alignment with comprehensive gap analysis.</div><div class="module-action">Launch Engine &rarr;</div></div>
+            <div class="module-card" onclick="FEOS.navigate('risk')"><div class="module-icon red">&#x1F6A8;</div><div class="module-title">Risk Advisor</div><div class="module-desc">Enterprise Risk Management covering strategic, operational, financial, legal, and reputational risk registers.</div><div class="module-action">Launch Engine &rarr;</div></div>
+            <div class="module-card" onclick="FEOS.navigate('sop')"><div class="module-icon blue">&#x1F4CB;</div><div class="module-title">SOP Builder</div><div class="module-desc">Generate professional Standard Operating Procedures with process flows, responsibility matrices, and control points.</div><div class="module-action">Launch Engine &rarr;</div></div>
+            <div class="module-card" onclick="FEOS.navigate('kpi')"><div class="module-icon green">&#x1F4CA;</div><div class="module-title">KPI Builder</div><div class="module-desc">Create measurable performance systems using Balanced Scorecard frameworks for financial, customer, and process metrics.</div><div class="module-action">Launch Engine &rarr;</div></div>
+            <div class="module-card" onclick="FEOS.navigate('policy')"><div class="module-icon purple">&#x1F4D6;</div><div class="module-title">Policy Builder</div><div class="module-desc">Develop corporate policies, HR policies, compliance policies, and governance policies with enforcement frameworks.</div><div class="module-action">Launch Engine &rarr;</div></div>
+            <div class="module-card" onclick="FEOS.navigate('decision')"><div class="module-icon gold">&#x1F4A1;</div><div class="module-title">Decision Assistant</div><div class="module-desc">Structured executive decision-making with problem identification, root cause analysis, options, and risk assessment.</div><div class="module-action">Launch Engine &rarr;</div></div>
+            <div class="module-card" onclick="FEOS.navigate('news')"><div class="module-icon amber">&#x1F4F0;</div><div class="module-title">Executive News Intelligence</div><div class="module-desc">Strategic business intelligence on global economy, Indonesia market, regulations, technology trends, and ESG developments.</div><div class="module-action">Launch Engine &rarr;</div></div>
+          </div>
+        </div>
+        <div class="module-view" id="view-diagnostic"></div>
+        <div class="module-view" id="view-strategy"></div>
+        <div class="module-view" id="view-governance"></div>
+        <div class="module-view" id="view-hr"></div>
+        <div class="module-view" id="view-compliance"></div>
+        <div class="module-view" id="view-risk"></div>
+        <div class="module-view" id="view-sop"></div>
+        <div class="module-view" id="view-kpi"></div>
+        <div class="module-view" id="view-policy"></div>
+        <div class="module-view" id="view-decision"></div>
+        <div class="module-view" id="view-news"></div>
+      </div>
+    </main>
+  </div>
+  <script src="modules/diagnostic.js"></script>
+  <script src="modules/strategy.js"></script>
+  <script src="modules/governance.js"></script>
+  <script src="modules/hr.js"></script>
+  <script src="modules/compliance.js"></script>
+  <script src="modules/risk.js"></script>
+  <script src="modules/sop.js"></script>
+  <script src="modules/kpi.js"></script>
+  <script src="modules/policy.js"></script>
+  <script src="modules/decision.js"></script>
+  <script src="modules/news.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
