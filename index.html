@@ -1,172 +1,772 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FORISA Executive Operating System (FEOS)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORISA Executive Operating System (FEOS)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #06b6d4;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #334155;
+            --card-bg: #1e293b;
+            --input-bg: #0f172a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--primary); color: var(--text-primary); min-height: 100vh; line-height: 1.6; }
+        .header { background: var(--secondary); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; font-weight: 700; font-size: 1.25rem; color: var(--text-primary); text-decoration: none; }
+        .logo-icon { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; cursor: pointer; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .hero { text-align: center; padding: 3rem 0 2rem; }
+        .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--text-primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; text-align: center; }
+        .stat-card .number { font-size: 1.75rem; font-weight: 800; color: var(--accent); }
+        .stat-card .label { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem; }
+        .section-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+        .section-title .icon { width: 28px; height: 28px; background: rgba(59, 130, 246, 0.15); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 0.9rem; }
+        .module-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+        .module-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .module-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .module-card .module-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+        .module-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary); }
+        .module-card p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+        .module-card .launch { margin-top: 1rem; font-size: 0.85rem; font-weight: 500; color: var(--accent); display: flex; align-items: center; gap: 0.35rem; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+        .section-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; }
+        .section-card:hover { border-color: var(--accent); }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        label { font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); }
+        input[type="text"], input[type="date"], textarea, select { background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 0.95rem; transition: all 0.2s; width: 100%; }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+        textarea { min-height: 120px; resize: vertical; }
+        .btn-primary { background: var(--accent); color: white; border: none; padding: 0.85rem 2rem; font-size: 1rem; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+        .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.7rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
+        .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+        .stakeholder-input { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+        .stakeholder-tag { background: rgba(59, 130, 246, 0.15); color: var(--accent); padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; }
+        .stakeholder-tag .remove { cursor: pointer; opacity: 0.7; }
+        .stakeholder-tag .remove:hover { opacity: 1; }
+        .stakeholder-add { background: transparent; border: 1px dashed var(--border); color: var(--text-muted); padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.85rem; cursor: pointer; }
+        .stakeholder-add:hover { border-color: var(--accent); color: var(--accent); }
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.95); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; gap: 1.5rem; }
+        .loading-overlay.active { display: flex; }
+        .spinner { width: 50px; height: 50px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { color: var(--text-secondary); font-size: 1rem; }
+        .report-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.25rem; position: relative; overflow: hidden; }
+        .report-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); }
+        .report-card.warning::before { background: var(--warning); }
+        .report-card.danger::before { background: var(--danger); }
+        .report-card.success::before { background: var(--success); }
+        .report-card.info::before { background: var(--info); }
+        .report-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .report-card .content { color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem; }
+        .report-card .content ul { margin-left: 1.25rem; margin-top: 0.5rem; }
+        .report-card .content li { margin-bottom: 0.35rem; }
+        .priority-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
+        .priority-item { background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+        .priority-item .phase { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+        .priority-item .days { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+        .priority-item .desc { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem; }
+        .pros-cons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+        .pros-box, .cons-box { background: var(--input-bg); border-radius: 8px; padding: 1.25rem; }
+        .pros-box { border-left: 3px solid var(--success); }
+        .cons-box { border-left: 3px solid var(--danger); }
+        .pros-box h4, .cons-box h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.75rem; }
+        .pros-box h4 { color: var(--success); }
+        .cons-box h4 { color: var(--danger); }
+        .risk-matrix { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1rem; }
+        .risk-item { background: var(--input-bg); border-radius: 8px; padding: 1rem; border-left: 3px solid var(--warning); }
+        .risk-item.high { border-left-color: var(--danger); }
+        .risk-item.medium { border-left-color: var(--warning); }
+        .risk-item.low { border-left-color: var(--success); }
+        .risk-item .risk-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .risk-item .risk-level { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.5rem; }
+        .risk-item.high .risk-level { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .risk-item.medium .risk-level { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .risk-item.low .risk-level { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .action-timeline { position: relative; padding-left: 2rem; }
+        .action-timeline::before { content: ''; position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: var(--border); }
+        .action-item { position: relative; margin-bottom: 1.5rem; padding-left: 1rem; }
+        .action-item::before { content: ''; position: absolute; left: -1.85rem; top: 0.35rem; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 2px solid var(--card-bg); }
+        .action-item .action-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .action-item .action-desc { font-size: 0.85rem; color: var(--text-secondary); }
+        .exec-summary { background: linear-gradient(135deg, var(--secondary), #1e3a5f); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .exec-summary::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--success), var(--warning)); }
+        .exec-summary h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .exec-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .exec-summary-item { background: rgba(15, 23, 42, 0.5); border-radius: 8px; padding: 1rem; border-left: 3px solid var(--accent); }
+        .exec-summary-item.warning { border-left-color: var(--warning); }
+        .exec-summary-item.danger { border-left-color: var(--danger); }
+        .exec-summary-item.success { border-left-color: var(--success); }
+        .exec-summary-item .label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.35rem; }
+        .exec-summary-item .value { font-size: 0.9rem; color: var(--text-primary); line-height: 1.5; }
+        .controls-bar { display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; }
+        .search-box { flex: 1; min-width: 250px; position: relative; }
+        .search-box input { width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 1rem 0.7rem 2.5rem; color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 0.9rem; }
+        .search-box input:focus { outline: none; border-color: var(--accent); }
+        .search-box::before { content: '🔍'; position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; }
+        .date-picker { display: flex; align-items: center; gap: 0.5rem; }
+        .date-picker input[type="date"] { background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.75rem; color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 0.85rem; }
+        .btn-refresh { background: var(--accent); color: white; border: none; padding: 0.7rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+        .btn-refresh:hover { background: var(--accent-hover); }
+        .btn-refresh.spinning .refresh-icon { animation: spin 1s linear infinite; }
+        .tabs { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--border); overflow-x: auto; padding-bottom: 1px; margin-bottom: 2rem; }
+        .tab { padding: 0.75rem 1.25rem; background: transparent; border: none; color: var(--text-secondary); font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
+        .tab:hover { color: var(--text-primary); }
+        .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+        .news-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .news-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .news-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); }
+        .news-card.urgent::before { background: var(--danger); }
+        .news-card.important::before { background: var(--warning); }
+        .news-card.positive::before { background: var(--success); }
+        .news-card .category-tag { display: inline-block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.6rem; border-radius: 4px; margin-bottom: 0.75rem; background: rgba(59, 130, 246, 0.15); color: var(--accent); }
+        .news-card .category-tag.urgent { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .news-card .category-tag.important { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .news-card .category-tag.positive { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .news-card .headline { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; line-height: 1.4; }
+        .news-card .source { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+        .news-card .summary { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem; }
+        .news-card .impact-section { background: var(--input-bg); border-radius: 8px; padding: 0.85rem; margin-bottom: 0.75rem; }
+        .news-card .impact-section .label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.35rem; }
+        .news-card .impact-section .text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+        .news-card .recommendation { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1)); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; padding: 0.85rem; }
+        .news-card .recommendation .label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); margin-bottom: 0.35rem; }
+        .news-card .recommendation .text { font-size: 0.85rem; color: var(--text-primary); line-height: 1.5; }
+        .bottom-sections { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+        .bottom-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+        .bottom-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .bottom-card .item { padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 0.5rem; }
+        .bottom-card .item:last-child { border-bottom: none; }
+        .bottom-card .item .number { font-weight: 700; color: var(--accent); min-width: 20px; }
+        .bottom-card .item .risk { color: var(--danger); }
+        .bottom-card .item .opportunity { color: var(--success); }
+        @media (max-width: 1024px) { .bottom-sections { grid-template-columns: 1fr; } .stats-bar { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .news-grid { grid-template-columns: 1fr; } .controls-bar { flex-direction: column; align-items: stretch; } .search-box { min-width: 100%; } .module-grid { grid-template-columns: 1fr; } .priority-grid { grid-template-columns: 1fr; } .risk-matrix { grid-template-columns: 1fr; } .pros-cons-grid { grid-template-columns: 1fr; } .form-grid { grid-template-columns: 1fr; } .page-header h1 { font-size: 1.75rem; } .nav-links { display: none; } .stats-bar { grid-template-columns: 1fr; } }
+        @media print { .header, .btn-primary, .btn-secondary, .btn-refresh, .loading-overlay { display: none !important; } .page-section { display: block !important; } }
+    </style>
+<base target="_blank">
 </head>
 <body>
-  <div class="app-container">
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <div class="brand">
-          <div class="brand-icon">F</div>
-          <div class="brand-text">
-            <span class="brand-name">FORISA IMPACT</span>
-            <span class="brand-sub">Executive Operating System</span>
-          </div>
-        </div>
-      </div>
-      <nav class="sidebar-nav">
-        <div class="nav-section">
-          <div class="nav-section-title">Platform</div>
-          <button class="nav-item active" data-view="dashboard" onclick="FEOS.navigate('dashboard')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            Executive Dashboard
-          </button>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-title">Advisory Engines</div>
-          <button class="nav-item" data-view="diagnostic" onclick="FEOS.navigate('diagnostic')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h4"/><path d="M18 12h4"/><path d="M12 2v4"/><path d="M12 18v4"/><circle cx="12" cy="12" r="5"/></svg>
-            Executive Diagnostic
-          </button>
-          <button class="nav-item" data-view="strategy" onclick="FEOS.navigate('strategy')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-            Strategy Advisor
-          </button>
-          <button class="nav-item" data-view="governance" onclick="FEOS.navigate('governance')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Governance Advisor
-          </button>
-          <button class="nav-item" data-view="hr" onclick="FEOS.navigate('hr')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            HR Business Advisor
-          </button>
-          <button class="nav-item" data-view="compliance" onclick="FEOS.navigate('compliance')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
-            Compliance Advisor
-          </button>
-          <button class="nav-item" data-view="risk" onclick="FEOS.navigate('risk')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            Risk Advisor
-          </button>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-title">System Builders</div>
-          <button class="nav-item" data-view="sop" onclick="FEOS.navigate('sop')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            SOP Builder
-          </button>
-          <button class="nav-item" data-view="kpi" onclick="FEOS.navigate('kpi')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            KPI Builder
-          </button>
-          <button class="nav-item" data-view="policy" onclick="FEOS.navigate('policy')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            Policy Builder
-          </button>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-title">Intelligence</div>
-          <button class="nav-item" data-view="decision" onclick="FEOS.navigate('decision')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-            Decision Assistant
-          </button>
-          <button class="nav-item" data-view="news" onclick="FEOS.navigate('news')">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-            Executive News
-          </button>
-        </div>
-      </nav>
-      <div class="sidebar-footer">
-        <div class="user-badge">
-          <div class="user-avatar">EX</div>
-          <div class="user-info">
-            <span class="user-name">Executive User</span>
-            <span class="user-role">CEO / Director Level</span>
-          </div>
-        </div>
-      </div>
-    </aside>
+    <header class="header">
+        <a href="#" class="logo" onclick="showPage('dashboard')">
+            <div class="logo-icon">⚡</div>
+            <span>FEOS</span>
+        </a>
+        <nav class="nav-links">
+            <a onclick="showPage('dashboard')" id="nav-dashboard" class="active">Dashboard</a>
+            <a onclick="showPage('decision')" id="nav-decision">Decision Assistant</a>
+            <a onclick="showPage('news')" id="nav-news">News Intelligence</a>
+        </nav>
+    </header>
 
-    <main class="main-content">
-      <header class="top-bar">
-        <div class="top-bar-left">
-          <button class="menu-toggle" id="menuToggle" onclick="FEOS.toggleSidebar()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-          </button>
-          <div>
-            <div class="page-title" id="pageTitle">Executive Dashboard</div>
-            <div class="page-subtitle" id="pageSubtitle">Executive Intelligence Platform for Building Scalable Organizations</div>
-          </div>
-        </div>
-        <div class="top-bar-right">
-          <button class="btn-icon" title="Notifications">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-          </button>
-          <button class="btn-icon" title="Settings">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          </button>
-        </div>
-      </header>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Analyzing decision context and generating executive insights...</div>
+    </div>
 
-      <div class="content-area" id="contentArea">
-        <div class="module-view active" id="view-dashboard">
-          <div class="dashboard-header">
-            <h1>Welcome to <span class="text-gold">FORISA Executive OS</span></h1>
-            <p>Your AI-powered executive advisory platform for strategic decision-making, organizational diagnostics, and sustainable growth.</p>
-          </div>
-          <div class="stats-row">
-            <div class="stat-card"><div class="stat-label">System Status</div><div class="stat-value text-green">Active</div><div class="stat-change positive">All engines operational</div></div>
-            <div class="stat-card"><div class="stat-label">Advisory Modules</div><div class="stat-value">11</div><div class="stat-change">Executive-grade tools</div></div>
-            <div class="stat-card"><div class="stat-label">Analysis Frameworks</div><div class="stat-value">7</div><div class="stat-change">Proven methodologies</div></div>
-            <div class="stat-card"><div class="stat-label">Last Updated</div><div class="stat-value" id="lastUpdated">Today</div><div class="stat-change">Version 1.0</div></div>
-          </div>
-          <div class="module-grid">
-            <div class="module-card" onclick="FEOS.navigate('diagnostic')"><div class="module-icon gold">&#x2696;</div><div class="module-title">Executive Diagnostic</div><div class="module-desc">Analyze organizational health, management maturity, and identify bottlenecks across strategy, structure, people, and processes.</div><div class="module-action">Launch Engine &rarr;</div></div>
-            <div class="module-card" onclick="FEOS.navigate('strategy')"><div class="module-icon blue">&#x25B2;</div><div class="module-title">Strategy Advisor</div><div class="module-desc">Business strategy analysis, growth planning, competitive positioning, and strategic transformation roadmaps.</div><div class="module-action">Launch Engine &rarr;</div></div>
-            <div class="module-card" onclick="FEOS.navigate('governance')"><div class="module-icon purple">&#x26A0;</div><div class="module-title">Governance Advisor</div><div class="module-desc">Build strong corporate governance through structure analysis, authority delegation, and accountability systems.</div><div class="module-action">Launch Engine &rarr;</div></div>
-            <div class="module-card" onclick="FEOS.navigate('hr')"><div class="module-icon green">&#x1F465;</div><div class="module-title">HR Business Advisor</div><div class="module-desc">Transform HR into a strategic business partner with organization design, talent management, and performance systems.</div><div class="module-action">Launch Engine &rarr;</div></div>
-            <div class="module-card" onclick="FEOS.navigate('compliance')"><div class="module-icon amber">&#x1F4C4;</div><div class="module-title">Compliance Advisor</div><div class="module-desc">Ensure regulatory compliance, ethical standards, and internal policy alignment with comprehensive gap analysis.</div><div class="module-action">Launch Engine &rarr;</div></div>
-            <div class="module-card" onclick="FEOS.navigate('risk')"><div class="module-icon red">&#x1F6A8;</div><div class="module-title">Risk Advisor</div><div class="module-desc">Enterprise Risk Management covering strategic, operational, financial, legal, and reputational risk registers.</div><div class="module-action">Launch Engine &rarr;</div></div>
-            <div class="module-card" onclick="FEOS.navigate('sop')"><div class="module-icon blue">&#x1F4CB;</div><div class="module-title">SOP Builder</div><div class="module-desc">Generate professional Standard Operating Procedures with process flows, responsibility matrices, and control points.</div><div class="module-action">Launch Engine &rarr;</div></div>
-            <div class="module-card" onclick="FEOS.navigate('kpi')"><div class="module-icon green">&#x1F4CA;</div><div class="module-title">KPI Builder</div><div class="module-desc">Create measurable performance systems using Balanced Scorecard frameworks for financial, customer, and process metrics.</div><div class="module-action">Launch Engine &rarr;</div></div>
-            <div class="module-card" onclick="FEOS.navigate('policy')"><div class="module-icon purple">&#x1F4D6;</div><div class="module-title">Policy Builder</div><div class="module-desc">Develop corporate policies, HR policies, compliance policies, and governance policies with enforcement frameworks.</div><div class="module-action">Launch Engine &rarr;</div></div>
-            <div class="module-card" onclick="FEOS.navigate('decision')"><div class="module-icon gold">&#x1F4A1;</div><div class="module-title">Decision Assistant</div><div class="module-desc">Structured executive decision-making with problem identification, root cause analysis, options, and risk assessment.</div><div class="module-action">Launch Engine &rarr;</div></div>
-            <div class="module-card" onclick="FEOS.navigate('news')"><div class="module-icon amber">&#x1F4F0;</div><div class="module-title">Executive News Intelligence</div><div class="module-desc">Strategic business intelligence on global economy, Indonesia market, regulations, technology trends, and ESG developments.</div><div class="module-action">Launch Engine &rarr;</div></div>
-          </div>
+    <div class="container">
+
+        <!-- DASHBOARD -->
+        <div class="page-section active" id="page-dashboard">
+            <div class="hero">
+                <h1>FORISA Executive Operating System</h1>
+                <p>Executive-grade tools for strategic decision-making, governance, and business intelligence.</p>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-card"><div class="number">13</div><div class="label">Advisory Modules</div></div>
+                <div class="stat-card"><div class="number">7</div><div class="label">Analysis Frameworks</div></div>
+                <div class="stat-card"><div class="number">Active</div><div class="label">System Status</div></div>
+                <div class="stat-card"><div class="number">v1.0</div><div class="label">Version</div></div>
+            </div>
+            <div class="section-title"><div class="icon">⚡</div>Advisory Modules</div>
+            <div class="module-grid">
+                <div class="module-card" onclick="showPage('diagnostic')"><div class="module-icon">⚖️</div><h3>Executive Diagnostic</h3><p>Analyze organizational health, management maturity, and identify bottlenecks across strategy, structure, people, and processes.</p><div class="launch">Launch Engine →</div></div>
+                <div class="module-card" onclick="showPage('strategy')"><div class="module-icon">▲</div><h3>Strategy Advisor</h3><p>Business strategy analysis, growth planning, competitive positioning, and strategic transformation roadmaps.</p><div class="launch">Launch Engine →</div></div>
+                <div class="module-card" onclick="showPage('governance')"><div class="module-icon">⚠</div><h3>Governance Advisor</h3><p>Build strong corporate governance through structure analysis, authority delegation, and accountability systems.</p><div class="launch">Launch Engine →</div></div>
+                <div class="module-card" onclick="showPage('hr')"><div class="module-icon">👥</div><h3>HR Business Advisor</h3><p>Transform HR into a strategic business partner with organization design, talent management, and performance systems.</p><div class="launch">Launch Engine →</div></div>
+                <div class="module-card" onclick="showPage('compliance')"><div class="module-icon">📄</div><h3>Compliance Advisor</h3><p>Ensure regulatory compliance, ethical standards, and internal policy alignment with comprehensive gap analysis.</p><div class="launch">Launch Engine →</div></div>
+                <div class="module-card" onclick="showPage('risk')"><div class="module-icon">🚨</div><h3>Risk Advisor</h3><p>Enterprise Risk Management covering strategic, operational, financial, legal, and reputational risk registers.</p><div class="launch">Launch Engine →</div></div>
+                <div class="module-card" onclick="showPage('sop')"><div class="module-icon">📋</div><h3>SOP Builder</h3><p>Generate professional Standard Operating Procedures with process flows, responsibility matrices, and control points.</p><div class="launch">Launch Engine →</div></div>
+                <div class="module-card" onclick="showPage('kpi')"><div class="module-icon">📊</div><h3>KPI Builder</h3><p>Create measurable performance systems using Balanced Scorecard frameworks for financial, customer, and process metrics.</p><div class="launch">Launch Engine →</div></div>
+                <div class="module-card" onclick="showPage('policy')"><div class="module-icon">📖</div><h3>Policy Builder</h3><p>Develop corporate policies, HR policies, compliance policies, and governance policies with enforcement frameworks.</p><div class="launch">Launch Engine →</div></div>
+                <div class="module-card" onclick="showPage('decision')"><div class="module-icon">💡</div><h3>Decision Assistant</h3><p>Structured executive decision-making with problem identification, root cause analysis, options, and risk assessment.</p><div class="launch">Launch Engine →</div></div>
+                <div class="module-card" onclick="showPage('news')"><div class="module-icon">📰</div><h3>Executive News Intelligence</h3><p>Strategic business intelligence on global economy, Indonesia market, regulations, technology trends, and ESG developments.</p><div class="launch">Launch Engine →</div></div>
+            </div>
         </div>
-        <div class="module-view" id="view-diagnostic"></div>
-        <div class="module-view" id="view-strategy"></div>
-        <div class="module-view" id="view-governance"></div>
-        <div class="module-view" id="view-hr"></div>
-        <div class="module-view" id="view-compliance"></div>
-        <div class="module-view" id="view-risk"></div>
-        <div class="module-view" id="view-sop"></div>
-        <div class="module-view" id="view-kpi"></div>
-        <div class="module-view" id="view-policy"></div>
-        <div class="module-view" id="view-decision"></div>
-        <div class="module-view" id="view-news"></div>
-      </div>
-    </main>
-  </div>
-  <script src="modules/diagnostic.js"></script>
-  <script src="modules/strategy.js"></script>
-  <script src="modules/governance.js"></script>
-  <script src="modules/hr.js"></script>
-  <script src="modules/compliance.js"></script>
-  <script src="modules/risk.js"></script>
-  <script src="modules/sop.js"></script>
-  <script src="modules/kpi.js"></script>
-  <script src="modules/policy.js"></script>
-  <script src="modules/decision.js"></script>
-  <script src="modules/news.js"></script>
-  <script src="script.js"></script>
+
+        <!-- DIAGNOSTIC -->
+        <div class="page-section" id="page-diagnostic">
+            <div class="hero"><h1>Executive Diagnostic</h1><p>Analyze organizational health, management maturity, and identify bottlenecks across strategy, structure, people, and processes.</p></div>
+            <div class="section-card">
+                <div class="section-title"><div class="icon">⚖️</div>Organization Profile</div>
+                <div class="form-grid">
+                    <div class="form-group"><label>Company Name *</label><input type="text" placeholder="Enter company name"></div>
+                    <div class="form-group"><label>Industry *</label><input type="text" placeholder="e.g., Manufacturing, Technology"></div>
+                    <div class="form-group"><label>Company Size *</label><select><option>Select size</option><option>1-50 employees</option><option>51-200</option><option>201-500</option><option>501-1000</option><option>1000+</option></select></div>
+                    <div class="form-group"><label>Years in Operation *</label><input type="text" placeholder="e.g., 15"></div>
+                    <div class="form-group"><label>Primary Challenge *</label><input type="text" placeholder="e.g., Scaling operations"></div>
+                    <div class="form-group"><label>Management Structure</label><select><option>Select structure</option><option>Flat</option><option>Hierarchical</option><option>Matrix</option><option>Network</option></select></div>
+                    <div class="form-group"><label>Recent Revenue Trend</label><select><option>Select trend</option><option>Growing</option><option>Stable</option><option>Declining</option><option>Volatile</option></select></div>
+                    <div class="form-group full-width"><label>Current Situation Description *</label><textarea placeholder="Describe your current organizational situation..."></textarea></div>
+                </div>
+                <div style="text-align:center; margin-top:1.5rem;">
+                    <button class="btn-primary" onclick="alert('Executive Diagnostic Report would be generated here.')">Generate Executive Diagnostic Report</button>
+                    <button class="btn-secondary" onclick="showPage('dashboard')" style="margin-left:0.5rem;">← Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STRATEGY -->
+        <div class="page-section" id="page-strategy">
+            <div class="hero"><h1>Strategy Advisor</h1><p>Business strategy analysis, growth planning, competitive positioning, and strategic transformation roadmaps.</p></div>
+            <div class="section-card">
+                <div class="section-title"><div class="icon">▲</div>Strategic Context</div>
+                <div class="form-grid">
+                    <div class="form-group"><label>Company Name *</label><input type="text" placeholder="Enter company name"></div>
+                    <div class="form-group"><label>Industry *</label><input type="text" placeholder="e.g., Manufacturing, Technology"></div>
+                    <div class="form-group"><label>Company Size *</label><select><option>Select size</option><option>Startup</option><option>SME</option><option>Large Enterprise</option></select></div>
+                    <div class="form-group"><label>Strategic Challenge *</label><input type="text" placeholder="e.g., Market expansion"></div>
+                    <div class="form-group"><label>Current Vision Statement</label><textarea placeholder="Enter your vision statement..."></textarea></div>
+                    <div class="form-group"><label>Current Mission Statement</label><textarea placeholder="Enter your mission statement..."></textarea></div>
+                    <div class="form-group"><label>Revenue Trend</label><select><option>Select trend</option><option>Growing</option><option>Stable</option><option>Declining</option></select></div>
+                    <div class="form-group"><label>Market Position</label><select><option>Select position</option><option>Market Leader</option><option>Challenger</option><option>Follower</option><option>Niche Player</option></select></div>
+                    <div class="form-group full-width"><label>Strategic Situation Description *</label><textarea placeholder="Describe your strategic situation..."></textarea></div>
+                </div>
+                <div style="text-align:center; margin-top:1.5rem;">
+                    <button class="btn-primary" onclick="alert('Strategic Analysis Report would be generated here.')">Generate Strategic Analysis</button>
+                    <button class="btn-secondary" onclick="showPage('dashboard')" style="margin-left:0.5rem;">← Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GOVERNANCE -->
+        <div class="page-section" id="page-governance">
+            <div class="hero"><h1>Governance Advisor</h1><p>Build strong corporate governance through structure analysis, authority delegation, and accountability systems.</p></div>
+            <div class="section-card">
+                <div class="section-title"><div class="icon">⚠</div>Governance Profile</div>
+                <div class="form-grid">
+                    <div class="form-group"><label>Company Name *</label><input type="text" placeholder="Enter company name"></div>
+                    <div class="form-group"><label>Legal Structure *</label><select><option>Select structure</option><option>PT (Perseroan Terbatas)</option><option>PT Tbk</option><option>Cooperative</option><option>Others</option></select></div>
+                    <div class="form-group"><label>Board Composition</label><textarea placeholder="Describe current board structure..."></textarea></div>
+                    <div class="form-group"><label>Governance Challenges *</label><textarea placeholder="Describe governance issues..."></textarea></div>
+                </div>
+                <div style="text-align:center; margin-top:1.5rem;">
+                    <button class="btn-primary" onclick="alert('Governance Analysis Report would be generated here.')">Generate Governance Analysis</button>
+                    <button class="btn-secondary" onclick="showPage('dashboard')" style="margin-left:0.5rem;">← Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HR -->
+        <div class="page-section" id="page-hr">
+            <div class="hero"><h1>HR Business Advisor</h1><p>Transform HR into a strategic business partner with organization design, talent management, and performance systems.</p></div>
+            <div class="section-card">
+                <div class="section-title"><div class="icon">👥</div>HR Profile</div>
+                <div class="form-grid">
+                    <div class="form-group"><label>Company Name *</label><input type="text" placeholder="Enter company name"></div>
+                    <div class="form-group"><label>Total Employees *</label><input type="text" placeholder="e.g., 250"></div>
+                    <div class="form-group"><label>HR Challenge *</label><input type="text" placeholder="e.g., Talent retention"></div>
+                    <div class="form-group"><label>Current HR Systems</label><textarea placeholder="Describe existing HR systems..."></textarea></div>
+                </div>
+                <div style="text-align:center; margin-top:1.5rem;">
+                    <button class="btn-primary" onclick="alert('HR Business Analysis Report would be generated here.')">Generate HR Analysis</button>
+                    <button class="btn-secondary" onclick="showPage('dashboard')" style="margin-left:0.5rem;">← Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPLIANCE -->
+        <div class="page-section" id="page-compliance">
+            <div class="hero"><h1>Compliance Advisor</h1><p>Ensure regulatory compliance, ethical standards, and internal policy alignment with comprehensive gap analysis.</p></div>
+            <div class="section-card">
+                <div class="section-title"><div class="icon">📄</div>Compliance Profile</div>
+                <div class="form-grid">
+                    <div class="form-group"><label>Company Name *</label><input type="text" placeholder="Enter company name"></div>
+                    <div class="form-group"><label>Industry *</label><input type="text" placeholder="e.g., Manufacturing, Technology"></div>
+                    <div class="form-group"><label>Company Size *</label><select><option>Select size</option><option>Small</option><option>Medium</option><option>Large</option></select></div>
+                    <div class="form-group"><label>Primary Compliance Area *</label><input type="text" placeholder="e.g., Data Privacy, Labor Law"></div>
+                    <div class="form-group"><label>Compliance Situation *</label><textarea placeholder="Describe compliance status..."></textarea></div>
+                    <div class="form-group"><label>Last Compliance Audit</label><input type="text" placeholder="e.g., January 2026"></div>
+                    <div class="form-group"><label>Have Compliance Officer?</label><select><option>Select</option><option>Yes</option><option>No</option></select></div>
+                    <div class="form-group"><label>Regulatory History</label><textarea placeholder="Any past regulatory issues..."></textarea></div>
+                </div>
+                <div style="text-align:center; margin-top:1.5rem;">
+                    <button class="btn-primary" onclick="alert('Compliance Analysis Report would be generated here.')">Generate Compliance Analysis</button>
+                    <button class="btn-secondary" onclick="showPage('dashboard')" style="margin-left:0.5rem;">← Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RISK -->
+        <div class="page-section" id="page-risk">
+            <div class="hero"><h1>Risk Advisor</h1><p>Enterprise Risk Management covering strategic, operational, financial, legal, and reputational risk registers.</p></div>
+            <div class="section-card">
+                <div class="section-title"><div class="icon">🚨</div>Risk Context</div>
+                <div class="form-grid">
+                    <div class="form-group"><label>Company Name *</label><input type="text" placeholder="Enter company name"></div>
+                    <div class="form-group"><label>Industry *</label><input type="text" placeholder="e.g., Manufacturing, Technology"></div>
+                    <div class="form-group"><label>Company Size *</label><select><option>Select size</option><option>Small</option><option>Medium</option><option>Large</option></select></div>
+                    <div class="form-group"><label>Primary Risk Concern *</label><input type="text" placeholder="e.g., Cybersecurity"></div>
+                    <div class="form-group"><label>Risk Situation Description *</label><textarea placeholder="Describe risk landscape..."></textarea></div>
+                    <div class="form-group"><label>Have Risk Register?</label><select><option>Select</option><option>Yes</option><option>No</option><option>Partial</option></select></div>
+                    <div class="form-group"><label>Have Risk Committee?</label><select><option>Select</option><option>Yes</option><option>No</option></select></div>
+                    <div class="form-group"><label>Recent Risk Events</label><textarea placeholder="Describe recent risk events..."></textarea></div>
+                </div>
+                <div style="text-align:center; margin-top:1.5rem;">
+                    <button class="btn-primary" onclick="alert('Risk Assessment Report would be generated here.')">Generate Risk Assessment</button>
+                    <button class="btn-secondary" onclick="showPage('dashboard')" style="margin-left:0.5rem;">← Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SOP -->
+        <div class="page-section" id="page-sop">
+            <div class="hero"><h1>SOP Builder</h1><p>Generate professional Standard Operating Procedures with process flows, responsibility matrices, and control points.</p></div>
+            <div class="section-card">
+                <div class="section-title"><div class="icon">📋</div>SOP Configuration</div>
+                <div class="form-grid">
+                    <div class="form-group"><label>Process Name *</label><input type="text" placeholder="e.g., Procurement Process"></div>
+                    <div class="form-group"><label>Department *</label><input type="text" placeholder="e.g., Operations"></div>
+                    <div class="form-group"><label>Process Objective *</label><textarea placeholder="What does this process achieve?"></textarea></div>
+                    <div class="form-group"><label>Key Steps</label><textarea placeholder="List key process steps..."></textarea></div>
+                </div>
+                <div style="text-align:center; margin-top:1.5rem;">
+                    <button class="btn-primary" onclick="alert('SOP Document would be generated here.')">Generate SOP Document</button>
+                    <button class="btn-secondary" onclick="showPage('dashboard')" style="margin-left:0.5rem;">← Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI -->
+        <div class="page-section" id="page-kpi">
+            <div class="hero"><h1>KPI Builder</h1><p>Create measurable performance systems using Balanced Scorecard frameworks for financial, customer, and process metrics.</p></div>
+            <div class="section-card">
+                <div class="section-title"><div class="icon">📊</div>KPI Configuration</div>
+                <div class="form-grid">
+                    <div class="form-group"><label>Company Name *</label><input type="text" placeholder="Enter company name"></div>
+                    <div class="form-group"><label>Department / Function *</label><input type="text" placeholder="e.g., Sales, Marketing"></div>
+                    <div class="form-group"><label>Primary Business Objective *</label><input type="text" placeholder="e.g., Increase revenue by 20%"></div>
+                    <div class="form-group"><label>Current Performance Context *</label><textarea placeholder="Describe current performance..."></textarea></div>
+                    <div class="form-group"><label>Measurement Period</label><select><option>Monthly</option><option>Quarterly</option><option>Annual</option></select></div>
+                    <div class="form-group"><label>Number of KPIs</label><select><option>3-5</option><option>6-10</option><option>10+</option></select></div>
+                </div>
+                <div style="text-align:center; margin-top:1.5rem;">
+                    <button class="btn-primary" onclick="alert('KPI Dashboard would be generated here.')">Generate KPI Dashboard</button>
+                    <button class="btn-secondary" onclick="showPage('dashboard')" style="margin-left:0.5rem;">← Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- POLICY -->
+        <div class="page-section" id="page-policy">
+            <div class="hero"><h1>Policy Builder</h1><p>Develop corporate policies, HR policies, compliance policies, and governance policies with enforcement frameworks.</p></div>
+            <div class="section-card">
+                <div class="section-title"><div class="icon">📖</div>Policy Configuration</div>
+                <div class="form-grid">
+                    <div class="form-group"><label>Policy Type *</label><select><option>Select type</option><option>HR Policy</option><option>Compliance Policy</option><option>Governance Policy</option><option>IT Security Policy</option><option>Code of Conduct</option></select></div>
+                    <div class="form-group"><label>Policy Title *</label><input type="text" placeholder="e.g., Remote Work Policy"></div>
+                    <div class="form-group"><label>Department</label><input type="text" placeholder="e.g., Human Resources"></div>
+                    <div class="form-group full-width"><label>Policy Scope & Purpose *</label><textarea placeholder="Describe what this policy covers..."></textarea></div>
+                </div>
+                <div style="text-align:center; margin-top:1.5rem;">
+                    <button class="btn-primary" onclick="alert('Policy Document would be generated here.')">Generate Policy Document</button>
+                    <button class="btn-secondary" onclick="showPage('dashboard')" style="margin-left:0.5rem;">← Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DECISION ASSISTANT -->
+        <div class="page-section" id="page-decision">
+            <div class="hero"><h1>Executive Decision Assistant</h1><p>Structured executive decision-making with comprehensive analysis, risk assessment, and actionable recommendations.</p></div>
+
+            <div id="decision-input">
+                <div class="section-card">
+                    <div class="section-title"><div class="icon">📋</div>Problem Title</div>
+                    <div class="form-group full-width">
+                        <label for="problemTitle">Decision Title *</label>
+                        <input type="text" id="problemTitle" placeholder="e.g., Expansion into Southeast Asian Markets">
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title"><div class="icon">🏢</div>Business Situation</div>
+                    <div class="form-group full-width">
+                        <label for="businessSituation">Describe the current business situation and context *</label>
+                        <textarea id="businessSituation" placeholder="Provide a comprehensive overview of the current state of the business, market position, recent developments, and any relevant background information..."></textarea>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title"><div class="icon">⚠️</div>Current Challenges</div>
+                    <div class="form-group full-width">
+                        <label for="currentChallenges">What are the key challenges and pain points? *</label>
+                        <textarea id="currentChallenges" placeholder="List the primary obstacles, difficulties, and issues that need to be addressed..."></textarea>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title"><div class="icon">🎯</div>Objectives</div>
+                    <div class="form-group full-width">
+                        <label for="objectives">What are the desired outcomes and goals? *</label>
+                        <textarea id="objectives" placeholder="Define clear, measurable objectives that this decision should achieve..."></textarea>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title"><div class="icon">🔗</div>Constraints</div>
+                    <div class="form-group full-width">
+                        <label for="constraints">What are the limitations and boundaries? *</label>
+                        <textarea id="constraints" placeholder="Budget limits, timeline restrictions, regulatory requirements, resource availability, etc..."></textarea>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title"><div class="icon">👥</div>Stakeholders</div>
+                    <div class="form-group full-width">
+                        <label>Key Stakeholders</label>
+                        <div class="stakeholder-input" id="stakeholderContainer">
+                            <button class="stakeholder-add" onclick="addStakeholder()">+ Add Stakeholder</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title"><div class="icon">📝</div>Additional Notes</div>
+                    <div class="form-group full-width">
+                        <label for="additionalNotes">Any other relevant information</label>
+                        <textarea id="additionalNotes" placeholder="Additional context, assumptions, or considerations..."></textarea>
+                    </div>
+                </div>
+                <div style="text-align:center; padding: 1rem 0 2rem;">
+                    <button class="btn-primary" onclick="analyzeDecision()"><span>🔍</span> Analyze Decision</button>
+                    <button class="btn-secondary" onclick="showPage('dashboard')" style="margin-left:0.5rem;">← Back to Dashboard</button>
+                </div>
+            </div>
+
+            <div id="decision-results" style="display:none;">
+                <div style="text-align:center; margin-bottom:2rem;">
+                    <h2 style="font-size:1.75rem; font-weight:700; color:var(--success);">✅ Executive Analysis Complete</h2>
+                    <p style="color:var(--text-secondary);">Comprehensive decision analysis generated based on your inputs</p>
+                </div>
+                <div class="report-card info">
+                    <h3>📊 Executive Summary</h3>
+                    <div class="content" id="executiveSummary"></div>
+                </div>
+                <div class="report-card">
+                    <h3>🔍 Root Cause Analysis</h3>
+                    <div class="content" id="rootCauseAnalysis"></div>
+                </div>
+                <div class="report-card success">
+                    <h3>💼 Business Impact</h3>
+                    <div class="content" id="businessImpact"></div>
+                </div>
+                <div class="report-card warning">
+                    <h3>⚖️ Governance Impact</h3>
+                    <div class="content" id="governanceImpact"></div>
+                </div>
+                <div class="report-card danger">
+                    <h3>⚠️ Risk Assessment</h3>
+                    <div class="content" id="riskAssessment"></div>
+                </div>
+                <div class="report-card info">
+                    <h3>📋 Available Options</h3>
+                    <div class="content" id="availableOptions"></div>
+                </div>
+                <div class="report-card">
+                    <h3>⚖️ Pros & Cons Analysis</h3>
+                    <div class="pros-cons-grid" id="prosCons"></div>
+                </div>
+                <div class="report-card success">
+                    <h3>⭐ Executive Recommendation</h3>
+                    <div class="content" id="executiveRecommendation"></div>
+                </div>
+                <div class="report-card info">
+                    <h3>📅 30-60-90 Day Action Plan</h3>
+                    <div class="priority-grid" id="actionPlan"></div>
+                </div>
+                <div class="report-card warning">
+                    <h3>🎯 Implementation Priority</h3>
+                    <div class="content" id="implementationPriority"></div>
+                </div>
+                <div class="report-card success">
+                    <h3>✅ Executive Conclusion</h3>
+                    <div class="content" id="executiveConclusion"></div>
+                </div>
+                <div style="text-align:center; margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border);">
+                    <button class="btn-secondary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+                    <button class="btn-secondary" onclick="resetDecision()" style="margin-left:0.5rem;">🔄 New Analysis</button>
+                    <button class="btn-secondary" onclick="showPage('dashboard')" style="margin-left:0.5rem;">← Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEWS INTELLIGENCE -->
+        <div class="page-section" id="page-news">
+            <div class="hero"><h1>Executive News Intelligence</h1><p>Strategic business intelligence on global economy, Indonesia market, regulations, technology trends, and ESG developments.</p></div>
+
+            <div class="exec-summary">
+                <h2>📊 Today's Executive Summary</h2>
+                <div class="exec-summary-grid">
+                    <div class="exec-summary-item">
+                        <div class="label">Market Sentiment</div>
+                        <div class="value">Mixed signals with cautious optimism in ASEAN markets. Indonesia Q2 GDP growth exceeded expectations at 5.11%.</div>
+                    </div>
+                    <div class="exec-summary-item warning">
+                        <div class="label">Key Risk Alert</div>
+                        <div class="value">Global supply chain disruptions intensifying due to geopolitical tensions in key shipping routes.</div>
+                    </div>
+                    <div class="exec-summary-item success">
+                        <div class="label">Opportunity</div>
+                        <div class="value">Indonesia digital economy projected to reach $130B by 2025, presenting significant investment opportunities.</div>
+                    </div>
+                    <div class="exec-summary-item danger">
+                        <div class="label">Regulatory Update</div>
+                        <div class="value">New data protection regulations effective next quarter requiring immediate compliance review.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-bar">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search news, topics, or keywords..." onkeyup="filterNews()">
+                </div>
+                <div class="date-picker">
+                    <input type="date" id="dateFrom" value="2026-07-18">
+                    <span style="color: var(--text-muted);">to</span>
+                    <input type="date" id="dateTo" value="2026-07-25">
+                </div>
+                <button class="btn-refresh" id="refreshBtn" onclick="refreshNews()">
+                    <span class="refresh-icon">🔄</span> Refresh
+                </button>
+                <button class="btn-secondary" onclick="showPage('dashboard')">← Back</button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab(this, 'all')">All News</button>
+                <button class="tab" onclick="switchTab(this, 'global')">Global Economy</button>
+                <button class="tab" onclick="switchTab(this, 'indonesia')">Indonesia Economy</button>
+                <button class="tab" onclick="switchTab(this, 'business')">Business</button>
+                <button class="tab" onclick="switchTab(this, 'governance')">Governance</button>
+                <button class="tab" onclick="switchTab(this, 'regulation')">Regulation</button>
+                <button class="tab" onclick="switchTab(this, 'technology')">Technology</button>
+                <button class="tab" onclick="switchTab(this, 'esg')">ESG</button>
+                <button class="tab" onclick="switchTab(this, 'manufacturing')">Manufacturing</button>
+                <button class="tab" onclick="switchTab(this, 'hr')">HR</button>
+                <button class="tab" onclick="switchTab(this, 'risk')">Risk</button>
+            </div>
+
+            <div class="news-grid" id="newsGrid"></div>
+
+            <div class="bottom-sections">
+                <div class="bottom-card">
+                    <h3>👁️ Executive Watchlist</h3>
+                    <div class="item"><span class="number">1</span><span>BI Rate decision scheduled for next month - monitor inflation data closely</span></div>
+                    <div class="item"><span class="number">2</span><span>US Federal Reserve policy signals affecting emerging market capital flows</span></div>
+                    <div class="item"><span class="number">3</span><span>Indonesia new capital city (IKN) infrastructure project progress</span></div>
+                    <div class="item"><span class="number">4</span><span>ASEAN digital economy framework negotiations</span></div>
+                    <div class="item"><span class="number">5</span><span>Global semiconductor supply chain recovery indicators</span></div>
+                </div>
+                <div class="bottom-card">
+                    <h3>⚠️ Top Risks</h3>
+                    <div class="item"><span class="number risk">●</span><span><strong>Geopolitical:</strong> Escalating tensions affecting trade routes and commodity prices</span></div>
+                    <div class="item"><span class="number risk">●</span><span><strong>Currency:</strong> IDR volatility against USD creating forex exposure</span></div>
+                    <div class="item"><span class="number risk">●</span><span><strong>Cyber:</strong> Increasing sophistication of cyber threats targeting enterprises</span></div>
+                    <div class="item"><span class="number risk">●</span><span><strong>Climate:</strong> Extreme weather events disrupting operations and supply chains</span></div>
+                    <div class="item"><span class="number risk">●</span><span><strong>Regulatory:</strong> Evolving compliance requirements across multiple jurisdictions</span></div>
+                </div>
+                <div class="bottom-card">
+                    <h3>💡 Top Opportunities</h3>
+                    <div class="item"><span class="number opportunity">●</span><span><strong>Digital Transformation:</strong> AI adoption creating 15-20% efficiency gains</span></div>
+                    <div class="item"><span class="number opportunity">●</span><span><strong>Green Economy:</strong> ESG investments attracting premium valuations</span></div>
+                    <div class="item"><span class="number opportunity">●</span><span><strong>Regional Expansion:</strong> ASEAN integration opening new market access</span></div>
+                    <div class="item"><span class="number opportunity">●</span><span><strong>Talent Pool:</strong> Indonesia young demographic driving innovation capacity</span></div>
+                    <div class="item"><span class="number opportunity">●</span><span><strong>Infrastructure:</strong> Government spending creating downstream opportunities</span></div>
+                </div>
+            </div>
+
+            <div class="exec-summary" style="margin-top: 2rem;">
+                <h2>🎯 Executive Action Recommendation</h2>
+                <div class="exec-summary-grid">
+                    <div class="exec-summary-item">
+                        <div class="label">Immediate (This Week)</div>
+                        <div class="value">Review data protection compliance readiness. Assess supply chain contingency plans. Monitor BI rate signals.</div>
+                    </div>
+                    <div class="exec-summary-item warning">
+                        <div class="label">Short-term (This Month)</div>
+                        <div class="value">Evaluate digital transformation roadmap acceleration. Review forex hedging strategy. Initiate ESG compliance audit.</div>
+                    </div>
+                    <div class="exec-summary-item success">
+                        <div class="label">Strategic (This Quarter)</div>
+                        <div class="value">Assess ASEAN expansion opportunities. Develop AI integration strategy. Strengthen cyber resilience framework.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ==================== NAVIGATION ====================
+        function showPage(page) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            const target = document.getElementById('page-' + page);
+            if (target) target.classList.add('active');
+            const nav = document.getElementById('nav-' + page);
+            if (nav) nav.classList.add('active');
+            else document.getElementById('nav-dashboard').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==================== DECISION ASSISTANT ====================
+        let stakeholders = [];
+
+        function addStakeholder() {
+            const name = prompt('Enter stakeholder name:');
+            if (name && name.trim()) { stakeholders.push(name.trim()); renderStakeholders(); }
+        }
+        function removeStakeholder(index) { stakeholders.splice(index, 1); renderStakeholders(); }
+        function renderStakeholders() {
+            const container = document.getElementById('stakeholderContainer');
+            container.innerHTML = stakeholders.map((s, i) => '<span class="stakeholder-tag">' + s + '<span class="remove" onclick="removeStakeholder(' + i + ')">×</span></span>').join('') + '<button class="stakeholder-add" onclick="addStakeholder()">+ Add Stakeholder</button>';
+        }
+
+        function analyzeDecision() {
+            const title = document.getElementById('problemTitle').value.trim();
+            const situation = document.getElementById('businessSituation').value.trim();
+            const challenges = document.getElementById('currentChallenges').value.trim();
+            const objectives = document.getElementById('objectives').value.trim();
+            const constraints = document.getElementById('constraints').value.trim();
+            if (!title || !situation || !challenges || !objectives || !constraints) {
+                alert('Please fill in all required fields (marked with *)'); return;
+            }
+            document.getElementById('loadingOverlay').classList.add('active');
+            setTimeout(() => {
+                generateReport(title, situation, challenges, objectives, constraints);
+                document.getElementById('loadingOverlay').classList.remove('active');
+                document.getElementById('decision-input').style.display = 'none';
+                document.getElementById('decision-results').style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 2500);
+        }
+
+        function generateReport(title, situation, challenges, objectives, constraints) {
+            const notes = document.getElementById('additionalNotes').value.trim();
+            const stakeholderList = stakeholders.length > 0 ? stakeholders.join(', ') : 'Key internal and external stakeholders';
+            const firstChallenge = challenges.split('.')[0];
+            const firstObjective = objectives.split('.')[0];
+            const firstConstraint = constraints.split('.')[0];
+
+            document.getElementById('executiveSummary').innerHTML = '<p><strong>Decision:</strong> ' + title + '</p><p style="margin-top:0.75rem;">This analysis evaluates a critical business decision requiring executive attention. The organization faces ' + firstChallenge.toLowerCase() + ' that necessitate a structured decision-making approach. Based on the current business situation and defined objectives, this report provides a comprehensive assessment of available options, associated risks, and a clear recommendation for executive action.</p><p style="margin-top:0.75rem;"><strong>Key Stakeholders:</strong> ' + stakeholderList + '</p>';
+
+            document.getElementById('rootCauseAnalysis').innerHTML = '<p>The fundamental issues driving this decision can be traced to several root causes:</p><ul><li><strong>Primary Driver:</strong> ' + firstChallenge + '</li><li><strong>Underlying Factor:</strong> Market dynamics and competitive pressures have intensified the need for strategic action</li><li><strong>Structural Issue:</strong> Current organizational capabilities may not fully align with the demands of the proposed direction</li><li><strong>External Pressure:</strong> Regulatory, technological, or market shifts requiring proactive response</li></ul><p style="margin-top:0.75rem;">Addressing these root causes requires a multi-faceted approach that goes beyond symptomatic fixes.</p>';
+
+            document.getElementById('businessImpact').innerHTML = '<p>This decision will have significant implications across multiple business dimensions:</p><ul><li><strong>Revenue Impact:</strong> Potential for revenue growth through strategic positioning and market expansion</li><li><strong>Operational Efficiency:</strong> Changes to current processes and resource allocation</li><li><strong>Competitive Position:</strong> Strengthening or repositioning in the market landscape</li><li><strong>Customer Value:</strong> Enhanced service delivery and customer experience capabilities</li><li><strong>Cost Structure:</strong> Initial investment requirements with long-term cost optimization potential</li></ul>';
+
+            document.getElementById('governanceImpact').innerHTML = '<p>The governance implications of this decision require careful consideration:</p><ul><li><strong>Board Oversight:</strong> Enhanced reporting and accountability mechanisms may be required</li><li><strong>Decision Rights:</strong> Clarification of authority levels and approval processes</li><li><strong>Compliance:</strong> Potential regulatory implications requiring legal review</li><li><strong>Transparency:</strong> Stakeholder communication and disclosure requirements</li><li><strong>Risk Governance:</strong> Integration with enterprise risk management framework</li></ul>';
+
+            document.getElementById('riskAssessment').innerHTML = '<div class="risk-matrix"><div class="risk-item high"><div class="risk-name">Execution Risk</div><span class="risk-level">High</span><div>Complexity of implementation may exceed current organizational capability</div></div><div class="risk-item medium"><div class="risk-name">Market Risk</div><span class="risk-level">Medium</span><div>External market conditions may shift during implementation</div></div><div class="risk-item medium"><div class="risk-name">Financial Risk</div><span class="risk-level">Medium</span><div>Investment requirements and ROI timeline uncertainty</div></div><div class="risk-item low"><div class="risk-name">Regulatory Risk</div><span class="risk-level">Low</span><div>Compliance requirements are well understood and manageable</div></div></div>';
+
+            document.getElementById('availableOptions').innerHTML = '<p>Three strategic options have been identified for executive consideration:</p><ul><li><strong>Option A - Full Implementation:</strong> Comprehensive execution of the proposed strategy with maximum resource commitment</li><li><strong>Option B - Phased Approach:</strong> Gradual rollout with pilot testing and iterative scaling based on results</li><li><strong>Option C - Strategic Partnership:</strong> Collaborate with external partners to share risk and accelerate execution</li></ul>';
+
+            document.getElementById('prosCons').innerHTML = '<div class="pros-box"><h4>Advantages</h4><ul><li>Aligns with strategic objectives of ' + firstObjective.toLowerCase() + '</li><li>Addresses critical challenges identified in the current assessment</li><li>Positions organization for sustainable competitive advantage</li><li>Creates value for key stakeholders</li><li>Builds organizational capabilities for future growth</li></ul></div><div class="cons-box"><h4>Disadvantages</h4><ul><li>Requires significant resource commitment within ' + firstConstraint.toLowerCase() + '</li><li>Implementation complexity and organizational change management</li><li>Short-term disruption to current operations</li><li>Uncertainty in projected outcomes and timelines</li><li>Potential resistance from affected stakeholders</li></ul></div>';
+
+            document.getElementById('executiveRecommendation').innerHTML = '<p><strong>Recommended Course of Action:</strong> Proceed with <strong>Option B - Phased Approach</strong></p><p style="margin-top:0.75rem;">This recommendation is based on the following rationale:</p><ul><li>Balances ambition with risk management through controlled rollout</li><li>Allows for learning and adaptation before full commitment</li><li>Aligns with organizational constraints while maintaining strategic momentum</li><li>Provides early wins to build support and demonstrate value</li><li>Enables resource optimization and course correction as needed</li></ul><p style="margin-top:0.75rem;"><strong>Success Probability:</strong> 75-80% with proper execution and governance oversight.</p>';
+
+            document.getElementById('actionPlan').innerHTML = '<div class="priority-item"><div class="phase" style="color:var(--accent)">Phase 1</div><div class="days">0-30 Days</div><div class="desc">Foundation & Setup</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.5rem;text-align:left;">• Form steering committee<br>• Define detailed scope<br>• Allocate initial resources<br>• Establish KPIs</div></div><div class="priority-item"><div class="phase" style="color:var(--warning)">Phase 2</div><div class="days">31-60 Days</div><div class="desc">Pilot & Validate</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.5rem;text-align:left;">• Launch pilot program<br>• Gather feedback<br>• Refine processes<br>• Risk monitoring</div></div><div class="priority-item"><div class="phase" style="color:var(--success)">Phase 3</div><div class="days">61-90 Days</div><div class="desc">Scale & Optimize</div><div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.5rem;text-align:left;">• Full implementation<br>• Performance review<br>• Lessons learned<br>• Strategic adjustment</div></div>';
+
+            document.getElementById('implementationPriority').innerHTML = '<div class="action-timeline"><div class="action-item"><div class="action-title">1. Immediate Actions (Week 1)</div><div class="action-desc">Secure executive approval, appoint project lead, and communicate decision to key stakeholders</div></div><div class="action-item"><div class="action-title">2. Short-term Priorities (Weeks 2-4)</div><div class="action-desc">Finalize detailed implementation plan, secure budget allocation, and begin resource mobilization</div></div><div class="action-item"><div class="action-title">3. Medium-term Focus (Months 2-3)</div><div class="action-desc">Execute pilot phase, monitor progress against KPIs, and adjust approach based on early results</div></div><div class="action-item"><div class="action-title">4. Long-term Integration (Ongoing)</div><div class="action-desc">Embed new capabilities into standard operations and establish continuous improvement mechanisms</div></div></div>';
+
+            document.getElementById('executiveConclusion').innerHTML = '<p>This decision represents a pivotal moment for the organization strategic trajectory. The analysis confirms that while challenges exist, the proposed direction aligns with organizational objectives and market opportunities.</p><p style="margin-top:0.75rem;"><strong>Key Takeaways:</strong></p><ul><li>The phased approach minimizes risk while maintaining strategic momentum</li><li>Strong governance and oversight are critical success factors</li><li>Stakeholder engagement must be prioritized throughout implementation</li><li>Regular review and adaptation will be essential</li></ul><p style="margin-top:0.75rem;"><strong>Next Step:</strong> Schedule executive decision meeting to formalize approval and authorize Phase 1 initiation.</p>' + (notes ? '<p style="margin-top:0.75rem;"><strong>Additional Context:</strong> ' + notes + '</p>' : '');
+        }
+
+        function resetDecision() {
+            document.getElementById('decision-results').style.display = 'none';
+            document.getElementById('decision-input').style.display = 'block';
+            stakeholders = []; renderStakeholders();
+            document.getElementById('problemTitle').value = '';
+            document.getElementById('businessSituation').value = '';
+            document.getElementById('currentChallenges').value = '';
+            document.getElementById('objectives').value = '';
+            document.getElementById('constraints').value = '';
+            document.getElementById('additionalNotes').value = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==================== NEWS INTELLIGENCE ====================
+        const newsData = [
+            { category: 'global', headline: 'Federal Reserve Signals Potential Rate Pause Amid Cooling Inflation', source: 'Reuters • 3 hours ago', summary: 'The US Federal Reserve indicated a possible pause in interest rate hikes as inflation data shows signs of moderation, potentially easing pressure on emerging markets.', impact: 'Reduced capital outflow risk from Indonesia. Lower borrowing costs for USD-denominated debt. Improved investor sentiment toward emerging markets.', recommendation: 'Review forex exposure and consider locking in favorable rates. Monitor bond market movements for refinancing opportunities.', urgency: 'important' },
+            { category: 'indonesia', headline: 'Indonesia Q2 GDP Growth Exceeds Expectations at 5.11%', source: 'BPS Indonesia • 5 hours ago', summary: 'Indonesia economy grew 5.11% year-on-year in Q2 2026, surpassing analyst forecasts of 4.9%, driven by strong domestic consumption and export recovery.', impact: 'Positive signal for business expansion. Increased consumer purchasing power. Improved credit ratings potential. Stronger investor confidence.', recommendation: 'Accelerate expansion plans. Increase inventory in anticipation of demand growth. Consider new market entry strategies.', urgency: 'positive' },
+            { category: 'business', headline: 'Major Indonesian Conglomerate Announces $2B Digital Infrastructure Investment', source: 'Kontan • 2 hours ago', summary: 'One of Indonesia largest conglomerates announced a $2 billion investment in digital infrastructure including data centers and cloud services over the next 3 years.', impact: 'Increased competition in digital services. Potential partnership opportunities. Rising demand for skilled tech talent. Infrastructure improvement.', recommendation: 'Assess digital partnership opportunities. Review talent retention strategy. Evaluate cloud migration timeline.', urgency: 'normal' },
+            { category: 'regulation', headline: 'Indonesia Enacts New Data Protection Law with Hefty Penalties', source: 'Hukum Online • 1 hour ago', summary: 'The new Personal Data Protection Law comes into effect next quarter with penalties up to 2% of annual revenue for non-compliance, requiring immediate organizational review.', impact: 'Mandatory compliance review required. Potential operational changes. Increased data governance costs. Legal liability exposure.', recommendation: 'Conduct immediate data protection audit. Appoint Data Protection Officer. Update privacy policies and consent mechanisms.', urgency: 'urgent' },
+            { category: 'technology', headline: 'AI Adoption in Indonesian Enterprises Reaches 34% in 2026', source: 'DailySocial • 4 hours ago', summary: 'A new survey reveals that 34% of Indonesian enterprises have adopted AI solutions, with customer service and operations being the top use cases.', impact: 'Competitive pressure to adopt AI. Talent shortage in AI/ML skills. Efficiency gains for early adopters. Technology investment requirements.', recommendation: 'Develop AI roadmap for your organization. Identify high-impact use cases. Invest in workforce upskilling programs.', urgency: 'important' },
+            { category: 'esg', headline: 'Indonesia Issues New Carbon Trading Regulations for Listed Companies', source: 'Bursa Efek Indonesia • 6 hours ago', summary: 'New regulations require listed companies to begin carbon emissions reporting and trading participation starting 2027, with phased implementation.', impact: 'Mandatory carbon accounting required. New compliance costs. Green financing opportunities. Reputational implications.', recommendation: 'Start carbon footprint baseline assessment. Explore green financing options. Integrate ESG metrics into reporting.', urgency: 'important' },
+            { category: 'governance', headline: 'OJK Strengthens Board Independence Requirements for Public Companies', source: 'OJK Press Release • 3 hours ago', summary: 'The Financial Services Authority issued new guidelines requiring at least 30% independent commissioners and enhanced audit committee independence.', impact: 'Board restructuring may be required. Enhanced governance standards. Increased compliance burden. Improved investor confidence.', recommendation: 'Review current board composition. Identify qualified independent candidates. Update governance charters and policies.', urgency: 'normal' },
+            { category: 'manufacturing', headline: 'Indonesia Manufacturing PMI Rises to 52.3, Signaling Expansion', source: 'S&P Global • 4 hours ago', summary: 'Indonesia Manufacturing Purchasing Managers Index rose to 52.3 in July, indicating sector expansion driven by new orders and production growth.', impact: 'Manufacturing sector growth signal. Increased demand for raw materials. Capacity expansion opportunities. Supply chain optimization needs.', recommendation: 'Evaluate capacity utilization. Review supplier agreements. Consider automation investments to meet growing demand.', urgency: 'positive' },
+            { category: 'hr', headline: 'Indonesia Faces Critical Shortage of Digital Talent', source: 'Kompas • 2 hours ago', summary: 'Industry reports indicate a 40% gap between demand and supply for digital skills, with data science, cybersecurity, and cloud computing most affected.', impact: 'Rising salary costs for tech roles. Difficulty in scaling digital initiatives. Need for alternative talent strategies. Training investment requirements.', recommendation: 'Develop internal talent pipeline. Partner with universities for internships. Consider remote/hybrid work policies to access wider talent pool.', urgency: 'important' },
+            { category: 'risk', headline: 'Global Supply Chain Disruptions Intensify in Key Shipping Routes', source: 'Bloomberg • 1 hour ago', summary: 'Geopolitical tensions have disrupted major shipping routes, causing 15-20% increases in freight costs and extended delivery timelines for Asian exporters.', impact: 'Increased logistics costs. Extended lead times. Inventory management challenges. Margin pressure. Customer delivery risks.', recommendation: 'Diversify shipping routes and carriers. Increase safety stock for critical materials. Renegotiate supplier contracts with cost-sharing clauses.', urgency: 'urgent' },
+            { category: 'global', headline: 'China Announces New Stimulus Measures to Boost Domestic Consumption', source: 'Financial Times • 5 hours ago', summary: 'Chinese authorities unveiled a comprehensive stimulus package focused on consumer spending and infrastructure investment to counter economic slowdown.', impact: 'Potential boost to commodity demand. Improved trade outlook for ASEAN. Currency stabilization effects. Market volatility in short term.', recommendation: 'Monitor commodity price movements. Assess exposure to China-dependent supply chains. Review export strategy for Chinese market.', urgency: 'normal' },
+            { category: 'indonesia', headline: 'Bank Indonesia Maintains BI Rate at 6.25%, Signals Cautious Stance', source: 'Bank Indonesia • 6 hours ago', summary: 'The central bank kept the benchmark rate unchanged at 6.25%, citing manageable inflation but warning of external risks requiring policy flexibility.', impact: 'Stable borrowing costs for now. Currency stability maintained. Room for future rate cuts if inflation permits. Investment climate certainty.', recommendation: 'Lock in fixed-rate financing where possible. Monitor inflation trends for rate direction signals. Maintain liquidity buffers.', urgency: 'normal' }
+        ];
+
+        let currentTab = 'all';
+
+        function renderNews(filter) {
+            const grid = document.getElementById('newsGrid');
+            const searchTerm = (filter || '').toLowerCase();
+            const filtered = newsData.filter(item => {
+                const matchesTab = currentTab === 'all' || item.category === currentTab;
+                const matchesSearch = !searchTerm || item.headline.toLowerCase().includes(searchTerm) || item.summary.toLowerCase().includes(searchTerm) || item.impact.toLowerCase().includes(searchTerm);
+                return matchesTab && matchesSearch;
+            });
+            grid.innerHTML = filtered.map(item => '<div class="news-card ' + item.urgency + '"><span class="category-tag ' + item.urgency + '">' + item.category.toUpperCase() + '</span><div class="headline">' + item.headline + '</div><div class="source">📰 ' + item.source + '</div><div class="summary">' + item.summary + '</div><div class="impact-section"><div class="label">💼 Business Impact</div><div class="text">' + item.impact + '</div></div><div class="recommendation"><div class="label">🎯 Strategic Recommendation</div><div class="text">' + item.recommendation + '</div></div></div>').join('');
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted);"><div style="font-size:3rem;margin-bottom:1rem;">📭</div><div style="font-size:1.1rem;font-weight:600;margin-bottom:0.5rem;">No news found</div><div>Try adjusting your search or filter criteria</div></div>';
+            }
+        }
+
+        function switchTab(tabBtn, category) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            tabBtn.classList.add('active');
+            currentTab = category;
+            renderNews(document.getElementById('searchInput').value);
+        }
+
+        function filterNews() {
+            renderNews(document.getElementById('searchInput').value);
+        }
+
+        function refreshNews() {
+            const btn = document.getElementById('refreshBtn');
+            btn.classList.add('spinning');
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.classList.remove('spinning');
+                btn.disabled = false;
+                newsData.sort(() => Math.random() - 0.5);
+                renderNews(document.getElementById('searchInput').value);
+            }, 1500);
+        }
+
+        // Initial render
+        renderNews();
+    </script>
 </body>
 </html>
